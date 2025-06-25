@@ -12,33 +12,32 @@
       <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
     </linearGradient>
     
-    <!-- Text shadow - identical to original logo -->
+    <!-- Text shadow for better visibility -->
     <filter id="textShadow">
-      <feDropShadow dx="1" dy="1" stdDeviation="1" flood-color="#000000" flood-opacity="0.2"/>
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.4"/>
     </filter>
   </defs>
   
   <!-- Background -->
   <rect width="1200" height="630" fill="url(#backgroundGradient)"/>
   
-  <!-- Decorative circles - subtle, NO TRUCK -->
-  <circle cx="100" cy="100" r="80" fill="#3b82f6" opacity="0.05"/>
-  <circle cx="1100" cy="530" r="120" fill="#2563eb" opacity="0.03"/>
-  <circle cx="1050" cy="150" r="60" fill="#ffffff" opacity="0.02"/>
+  <!-- Subtle decorative elements -->
+  <circle cx="150" cy="150" r="60" fill="#3b82f6" opacity="0.08"/>
+  <circle cx="1050" cy="480" r="80" fill="#2563eb" opacity="0.06"/>
   
-  <!-- Original CEMTRANS logo - centered and scaled up -->
-  <g transform="translate(400, 250)">
-    <!-- Company Name - white text like original logo -->
-    <text x="0" y="42" font-family="Arial, sans-serif" font-size="76" font-weight="bold" fill="#ffffff" filter="url(#textShadow)">
+  <!-- CEMTRANS logo - exactly like original but scaled and centered -->
+  <g transform="translate(350, 280)">
+    <!-- Company Name - white text exactly like original -->
+    <text x="0" y="0" font-family="Arial, sans-serif" font-size="90" font-weight="bold" fill="#ffffff" filter="url(#textShadow)">
       CEMTRANS
     </text>
     
-    <!-- Tagline - gray text like original logo -->
-    <text x="0" y="74" font-family="Arial, sans-serif" font-size="32" font-weight="normal" fill="#718096">
+    <!-- Tagline - gray text exactly like original -->
+    <text x="0" y="45" font-family="Arial, sans-serif" font-size="36" font-weight="normal" fill="#718096">
       TRANSPORT SILOSOWY
     </text>
     
-    <!-- Decorative accent line - identical to original logo -->
-    <rect x="0" y="88" width="140" height="6" rx="3" fill="url(#accentGradient)" opacity="0.8"/>
+    <!-- Decorative accent line - exactly like original -->
+    <rect x="0" y="65" width="160" height="7" rx="3.5" fill="url(#accentGradient)" opacity="0.8"/>
   </g>
 </svg> 
