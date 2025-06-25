@@ -1185,8 +1185,8 @@
                             <div class="text">Lat specjalizacji w transporcie silosowym</div>
                         </div>
                          <div class="stat-inline">
-                            <div class="number" data-target="100">0</div>
-                            <div class="text">% zadowolonych klientów</div>
+                            <div class="number" data-target="100" data-suffix="%">0</div>
+                            <div class="text">zadowolonych klientów</div>
                         </div>
                     </div>
                     <div style="margin-top: 3rem; text-align: center;">
@@ -1446,14 +1446,15 @@
         // Counter Animation
         const animateCounter = (element) => {
             const target = +element.getAttribute('data-target');
-            element.innerText = '0';
+            const suffix = element.getAttribute('data-suffix') || '';
+            element.innerText = '0' + suffix;
             const duration = 1500; // 1.5 seconds
             const stepTime = Math.abs(Math.floor(duration / target));
 
             let current = 0;
             const timer = setInterval(() => {
                 current += 1;
-                element.innerText = current;
+                element.innerText = current + suffix;
                 if (current == target) {
                     clearInterval(timer);
                 }
