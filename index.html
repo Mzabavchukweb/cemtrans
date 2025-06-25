@@ -960,19 +960,26 @@
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
-                gap: 1.1rem;
+                gap: 0.8rem;
                 width: 100%;
             }
             .top-header-contact a {
-                flex: 1 1 0;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                font-size: 0.85rem;
+                font-size: 0.8rem;
                 padding: 0.35rem 0;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+            }
+            .top-header-contact a[href^="tel"] {
+                flex: 0 0 auto;
+                max-width: 45%;
+            }
+            .top-header-contact a[href^="mailto"] {
+                flex: 1 1 auto;
+                max-width: 55%;
             }
 
             /* Mobile Navigation */
