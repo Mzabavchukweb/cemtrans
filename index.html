@@ -127,9 +127,9 @@
           "name": "Szczecin"
         },
         {
-          "@type": "AdministrativeArea", 
-          "name": "Województwo Zachodniopomorskie"
-        },
+        "@type": "AdministrativeArea",
+        "name": "Województwo Zachodniopomorskie"
+      },
         {
           "@type": "AdministrativeArea",
           "name": "Police"
@@ -305,7 +305,7 @@
         .top-header-contact a:hover {
             opacity: 0.8;
         }
-
+        
         .top-header-contact a[href^="mailto"] {
             white-space: nowrap;
         }
@@ -1525,9 +1525,9 @@
                     const numberElements = entry.target.querySelectorAll('.number');
                     numberElements.forEach(numberElement => {
                         if (!numberElement.classList.contains('is-animated')) {
-                            animateCounter(numberElement);
-                            numberElement.classList.add('is-animated');
-                        }
+                        animateCounter(numberElement);
+                        numberElement.classList.add('is-animated');
+                    }
                     });
                     revealObserver.unobserve(entry.target);
                 }
