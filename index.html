@@ -267,14 +267,6 @@
             text-decoration: none;
         }
         
-        .logo img {
-            image-rendering: -webkit-optimize-contrast; /* Safari */
-            image-rendering: crisp-edges; /* Standard */
-            image-rendering: pixelated; /* Fallback */
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        
         .main-nav ul {
             display: flex;
             list-style: none;
@@ -940,16 +932,6 @@
                 text-align: center;
                 flex-wrap: nowrap;
             }
-            
-            /* Mobile logo optimizations */
-            .logo img {
-                image-rendering: -webkit-optimize-contrast !important;
-                image-rendering: crisp-edges !important;
-                transform: translateZ(0); /* Force hardware acceleration */
-                backface-visibility: hidden;
-                -webkit-backface-visibility: hidden;
-                will-change: transform;
-            }
             .top-header {
                 padding: 0.8rem 0;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -1139,7 +1121,7 @@
 
     <header class="main-header">
         <div class="container">
-            <a href="#start" class="logo" style="display: flex; align-items: center;"><img src="cemtrans-logo.svg" alt="CEMTRANS logo" height="56" width="320" style="display: block; max-width: 320px; height: 56px; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;"> </a>
+            <a href="#start" class="logo" style="display: flex; align-items: center;"><img src="cemtrans-logo.svg" alt="CEMTRANS logo" height="56" style="display: block; max-width: 320px; height: 56px;"> </a>
             <nav class="main-nav">
                 <ul>
                     <li><a href="#start">Transport Silosowy</a></li>
