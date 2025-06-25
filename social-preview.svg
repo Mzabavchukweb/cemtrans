@@ -1,0 +1,26 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0A2342"/>
+      <stop offset="100%" style="stop-color:#1e293b"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#2563eb"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  
+  <!-- Centered logo group -->
+  <g transform="translate(600, 315)">
+    <!-- CEMTRANS text - centered -->
+    <text x="0" y="-30" font-family="Arial, sans-serif" font-size="90" font-weight="bold" fill="white" text-anchor="middle">CEMTRANS</text>
+    
+    <!-- TRANSPORT SILOSOWY - centered -->
+    <text x="0" y="10" font-family="Arial, sans-serif" font-size="36" fill="#e2e8f0" text-anchor="middle">TRANSPORT SILOSOWY</text>
+    
+    <!-- Blue line - centered -->
+    <rect x="-100" y="25" width="200" height="8" rx="4" fill="url(#accent)"/>
+  </g>
+</svg> 
