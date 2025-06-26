@@ -1361,7 +1361,7 @@
             <div class="container">
                 <h2 id="contact-title" class="section-title">Skontaktuj się z Nami </h2>
                 <p class="section-subtitle">Potrzebujesz przewozu cementu, popiołów lub mączek wapiennych naczepami silos? Skontaktuj się z nami, aby otrzymać szczegółową wycenę transportu.</p>
-                <form class="contact-form" id="contactForm" aria-label="Formularz kontaktowy" novalidate>
+                <form class="contact-form" id="contactForm" aria-label="Formularz kontaktowy" action="https://formspree.io/f/xqabgnoz" method="POST">
                     <div class="form-group">
                         <input type="text" id="name" name="name" class="form-input" required placeholder=" " aria-describedby="name-error">
                         <label for="name" class="form-label">Imię i nazwisko / Firma<span aria-hidden="true"> *</span></label>
@@ -1377,6 +1377,12 @@
                         <label for="message" class="form-label">Treść zapytania<span aria-hidden="true"> *</span></label>
                         <div id="message-error" class="error-message" role="alert" aria-live="polite"></div>
                     </div>
+                    
+                    <!-- Hidden fields for Formspree -->
+                    <input type="hidden" name="_subject" value="Nowe zapytanie o transport silosowy - CEMTRANS">
+                    <input type="hidden" name="_next" value="https://mzabavchukweb.github.io/cemtrans/#kontakt">
+                    <input type="hidden" name="_autoresponse" value="Dziękujemy za zapytanie! Skontaktujemy się z Państwem w ciągu 24 godzin. CEMTRANS Sp. z o.o.">
+                    
                     <button type="submit" class="cta-button" aria-describedby="form-status">Wyślij Wiadomość</button>
                 </form>
                 
@@ -1453,8 +1459,6 @@
 
     <script defer>
         document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
             const name = document.getElementById('name');
             const email = document.getElementById('email');
             const message = document.getElementById('message');
@@ -1463,32 +1467,56 @@
             let isValid = true;
             let errorMsg = '';
             
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(error => {
+                error.style.display = 'none';
+                error.textContent = '';
+            });
+            document.querySelectorAll('.form-input').forEach(input => {
+                input.classList.remove('error');
+            });
+            
             if (!name.value.trim()) {
                 errorMsg += 'Proszę podać imię i nazwisko lub nazwę firmy.\n';
+                name.classList.add('error');
+                document.getElementById('name-error').textContent = 'To pole jest wymagane';
+                document.getElementById('name-error').style.display = 'block';
                 isValid = false;
             }
             
             if (!email.value.trim()) {
                 errorMsg += 'Proszę podać adres e-mail.\n';
+                email.classList.add('error');
+                document.getElementById('email-error').textContent = 'To pole jest wymagane';
+                document.getElementById('email-error').style.display = 'block';
                 isValid = false;
             } else if (!/\S+@\S+\.\S+/.test(email.value)) {
                 errorMsg += 'Proszę podać prawidłowy adres e-mail.\n';
+                email.classList.add('error');
+                document.getElementById('email-error').textContent = 'Proszę podać prawidłowy adres e-mail';
+                document.getElementById('email-error').style.display = 'block';
                 isValid = false;
             }
             
             if (!message.value.trim()) {
                 errorMsg += 'Proszę wpisać treść zapytania.\n';
+                message.classList.add('error');
+                document.getElementById('message-error').textContent = 'To pole jest wymagane';
+                document.getElementById('message-error').style.display = 'block';
                 isValid = false;
             }
             
             if (!isValid) {
-                showMessage('Proszę poprawić błędy w formularzu:\n' + errorMsg, 'error');
-                return;
+                e.preventDefault();
+                showMessage('Proszę poprawić błędy w formularzu.', 'error');
+                return false;
             }
             
-            // Success message
-            showMessage('✅ Dziękujemy za zapytanie! Skontaktujemy się z Państwem w ciągu 24 godzin.', 'success');
-            this.reset();
+            // If validation passes, show loading message and let Formspree handle submission
+            showMessage('⏳ Wysyłanie wiadomości...', 'loading');
+            
+            // Form will be submitted to Formspree
+            // User will be redirected to Formspree's thank you page
         });
 
         // Function to show form messages
@@ -1500,15 +1528,20 @@
             if (type === 'success') {
                 messageDiv.style.backgroundColor = '#10b981';
                 messageDiv.style.color = 'white';
+            } else if (type === 'loading') {
+                messageDiv.style.backgroundColor = '#3b82f6';
+                messageDiv.style.color = 'white';
             } else {
                 messageDiv.style.backgroundColor = '#ef4444';
                 messageDiv.style.color = 'white';
             }
             
-            // Hide message after 5 seconds
-            setTimeout(() => {
-                messageDiv.style.display = 'none';
-            }, 5000);
+            // Hide message after 5 seconds (except for loading)
+            if (type !== 'loading') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            }
         }
 
         // Sticky header logic
