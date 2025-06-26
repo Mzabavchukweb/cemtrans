@@ -780,13 +780,35 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 4rem;
-            align-items: center;
+            align-items: start;
         }
 
         .map-text-content {
             padding: 3rem;
             background-color: var(--white);
             border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .map-text-content h3 {
+            font-size: 2rem;
+            color: var(--primary-navy);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .map-text-content p {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            color: var(--gray-text);
+        }
+
+        .map-text-content p strong {
+            color: var(--primary-navy);
+            font-weight: 600;
         }
 
         .map-wrapper {
@@ -1204,8 +1226,44 @@
                 max-width: 100%;
                 margin: 0 auto;
             }
+            
+            .map-text-content {
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .map-text-content h3 {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+                text-align: center;
+            }
+            
+            .map-text-content p {
+                font-size: 0.9rem;
+                line-height: 1.6;
+                margin-bottom: 0.75rem;
+            }
+            
             .map-wrapper {
                 height: 300px;
+            }
+        }
+
+        @media(max-width: 480px) {
+            .map-text-content {
+                padding: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .map-text-content h3 {
+                font-size: 1.3rem;
+                margin-bottom: 0.75rem;
+            }
+            
+            .map-text-content p {
+                font-size: 0.85rem;
+                line-height: 1.5;
+                margin-bottom: 0.5rem;
             }
         }
 
@@ -1337,6 +1395,147 @@
                 width: 10px !important;
                 height: 10px !important;
                 margin-right: 5px !important;
+                         }
+         }
+
+        /* --- RESPONSYWNA SEKCJA OBSZARÓW DZIAŁANIA --- */
+        .service-areas-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .service-area-country {
+            padding: 1rem;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-area-country:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .country-title {
+            color: var(--primary-navy);
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-blue);
+            position: relative;
+        }
+
+        .country-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: var(--primary-navy);
+        }
+
+        .areas-list {
+            color: var(--gray-text);
+            margin: 0;
+            padding-left: 1.2rem;
+            list-style-type: none;
+            position: relative;
+        }
+
+        .areas-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+            position: relative;
+            line-height: 1.5;
+            transition: color 0.3s ease, padding-left 0.3s ease;
+        }
+
+        .areas-list li::before {
+            content: '📍';
+            position: absolute;
+            left: -0.8rem;
+            color: var(--accent-blue);
+            font-size: 0.9rem;
+        }
+
+        .areas-list li:hover {
+            color: var(--primary-navy);
+            padding-left: 1.2rem;
+            font-weight: 500;
+        }
+
+        /* Responsywność dla sekcji obszarów działania */
+        @media(max-width: 768px) {
+            .service-areas-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+                margin: 1.5rem 0;
+                padding: 1rem;
+            }
+
+            .service-area-country {
+                padding: 0.75rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .country-title {
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
+                text-align: center;
+            }
+
+            .areas-list {
+                padding-left: 0.8rem;
+            }
+
+            .areas-list li {
+                margin-bottom: 0.4rem;
+                font-size: 0.9rem;
+                padding-left: 0.8rem;
+            }
+
+            .areas-list li::before {
+                left: -0.6rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media(max-width: 480px) {
+            .service-areas-grid {
+                margin: 1rem 0;
+                padding: 0.75rem;
+                gap: 1rem;
+            }
+
+            .service-area-country {
+                padding: 0.5rem;
+            }
+
+            .country-title {
+                font-size: 0.95rem;
+                margin-bottom: 0.4rem;
+            }
+
+            .areas-list li {
+                font-size: 0.85rem;
+                margin-bottom: 0.35rem;
+                padding-left: 0.7rem;
+            }
+
+            .areas-list li::before {
+                left: -0.5rem;
+                font-size: 0.7rem;
             }
         }
 
@@ -1532,10 +1731,10 @@
                     <h3>Obszar Naszego Działania</h3>
                     <p>CEMTRANS świadczy usługi transportu silosowego w północno-zachodniej Polsce oraz przyległych regionach Niemiec. Obsługujemy klientów w następujących województwach i regionach:</p>
                     <p><strong>Obszar działania obejmuje:</strong></p>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
-                        <div>
-                            <strong style="color: var(--primary-navy);">Polska:</strong>
-                            <ul style="color: var(--gray-text); margin: 0.5rem 0; padding-left: 1.5rem;">
+                    <div class="service-areas-grid">
+                        <div class="service-area-country">
+                            <strong class="country-title">Polska:</strong>
+                            <ul class="areas-list">
                                 <li>Zachodniopomorskie</li>
                                 <li>Pomorskie</li>
                                 <li>Wielkopolskie</li>
@@ -1543,9 +1742,9 @@
                                 <li>Lubuskie</li>
                             </ul>
                         </div>
-                        <div>
-                            <strong style="color: var(--primary-navy);">Niemcy:</strong>
-                            <ul style="color: var(--gray-text); margin: 0.5rem 0; padding-left: 1.5rem;">
+                        <div class="service-area-country">
+                            <strong class="country-title">Niemcy:</strong>
+                            <ul class="areas-list">
                                 <li>Brandenburg</li>
                                 <li>Berlin</li>
                                 <li>Mecklenburg-Vorpommern</li>
