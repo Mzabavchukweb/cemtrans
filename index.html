@@ -1214,13 +1214,29 @@
         }
 
         /* --- LEAFLET MAP STYLES --- */
+        #service-area-map {
+            position: relative !important;
+            z-index: 1 !important;
+        }
+
+        .leaflet-popup-pane {
+            z-index: 9999 !important;
+        }
+
         .leaflet-popup-content-wrapper {
             border-radius: 8px !important;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+            z-index: 9999 !important;
+            position: relative !important;
         }
 
         .leaflet-popup-tip {
             box-shadow: none !important;
+            z-index: 9999 !important;
+        }
+
+        .leaflet-popup {
+            z-index: 9999 !important;
         }
 
         .company-marker {
@@ -1229,23 +1245,154 @@
 
         .map-legend {
             pointer-events: auto !important;
+            z-index: 1000 !important;
         }
 
-        /* Responsywność legendy na mobile */
+        /* Responsywność mapy na mobile */
         @media(max-width: 768px) {
+            #service-area-map {
+                height: 350px !important;
+            }
+
+            .map-wrapper {
+                height: 350px !important;
+                margin-bottom: 1rem;
+            }
+            
             .map-legend {
-                font-size: 11px !important;
-                padding: 10px !important;
-                max-width: 200px !important;
+                font-size: 10px !important;
+                padding: 8px !important;
+                max-width: 160px !important;
+                margin: 5px !important;
+                line-height: 1.2 !important;
+                position: fixed !important;
+                bottom: 10px !important;
+                left: 10px !important;
+                z-index: 1000 !important;
+                background: rgba(255, 255, 255, 0.95) !important;
+                backdrop-filter: blur(5px) !important;
             }
             
             .map-legend h4 {
-                font-size: 14px !important;
-                margin-bottom: 8px !important;
+                font-size: 12px !important;
+                margin-bottom: 6px !important;
             }
             
             .map-legend div {
+                margin-bottom: 4px !important;
+                display: flex !important;
+                align-items: center !important;
+            }
+
+            .map-legend span {
+                width: 12px !important;
+                height: 12px !important;
+                flex-shrink: 0 !important;
+                margin-right: 6px !important;
+            }
+
+            .leaflet-popup-content-wrapper {
+                max-width: 200px !important;
+                font-size: 12px !important;
+            }
+
+            .leaflet-popup-content h4 {
+                font-size: 14px !important;
                 margin-bottom: 6px !important;
+            }
+
+            .leaflet-popup-content p {
+                font-size: 11px !important;
+                margin-bottom: 4px !important;
+                line-height: 1.3 !important;
+            }
+        }
+
+        @media(max-width: 480px) {
+            #service-area-map {
+                height: 300px !important;
+            }
+
+            .map-wrapper {
+                height: 300px !important;
+            }
+            
+            .map-legend {
+                font-size: 9px !important;
+                padding: 6px !important;
+                max-width: 140px !important;
+                margin: 3px !important;
+            }
+            
+            .map-legend h4 {
+                font-size: 11px !important;
+                margin-bottom: 4px !important;
+            }
+            
+            .map-legend div {
+                margin-bottom: 3px !important;
+            }
+
+            .map-legend span {
+                width: 10px !important;
+                height: 10px !important;
+                margin-right: 5px !important;
+            }
+        }
+
+        /* Dodatkowe style dla popup'ów */
+        .leaflet-popup.custom-popup .leaflet-popup-content-wrapper {
+            border-radius: 10px !important;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+            border: 1px solid #e2e8f0 !important;
+        }
+
+        .leaflet-popup.company-popup .leaflet-popup-content-wrapper {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%) !important;
+            border: 2px solid #0A2342 !important;
+        }
+
+        .leaflet-popup-close-button {
+            color: #718096 !important;
+            font-size: 18px !important;
+            font-weight: bold !important;
+            padding: 4px 6px !important;
+        }
+
+        .leaflet-popup-close-button:hover {
+            color: #0A2342 !important;
+            background: rgba(59, 130, 246, 0.1) !important;
+            border-radius: 50% !important;
+        }
+
+        /* Fix dla kontrolek mapy na mobile */
+        .leaflet-control-zoom {
+            border: none !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .leaflet-control-zoom a {
+            border-radius: 4px !important;
+            color: #0A2342 !important;
+            font-weight: bold !important;
+        }
+
+        .leaflet-control-zoom a:hover {
+            background: #3b82f6 !important;
+            color: white !important;
+        }
+
+        @media(max-width: 768px) {
+            .leaflet-control-zoom {
+                margin-right: 5px !important;
+                margin-top: 5px !important;
+            }
+            
+            .leaflet-control-zoom a {
+                width: 35px !important;
+                height: 35px !important;
+                line-height: 35px !important;
+                font-size: 16px !important;
             }
         }
     </style>
@@ -1753,13 +1900,28 @@
 
         // --- LEAFLET SERVICE AREA MAP ---
         function initServiceAreaMap() {
+            // Responsywne ustawienia mapy w zależności od rozmiaru ekranu
+            const isMobile = window.innerWidth <= 768;
+            const initialZoom = isMobile ? 6 : 7;
+            const initialCenter = isMobile ? [53.2, 15.2] : [53.4027, 14.8497];
+
             // Inicjalizacja mapy Leaflet
-            const map = L.map('service-area-map').setView([53.4027, 14.8497], 7);
+            const map = L.map('service-area-map', {
+                zoomControl: true,
+                scrollWheelZoom: isMobile ? false : true,
+                doubleClickZoom: true,
+                touchZoom: true,
+                dragging: true,
+                tap: true,
+                zoomSnap: 0.5,
+                zoomDelta: 0.5
+            }).setView(initialCenter, initialZoom);
 
             // Dodanie warstwy OpenStreetMap
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 18
+                maxZoom: 18,
+                minZoom: isMobile ? 5 : 4
             }).addTo(map);
 
             // Obszary działania - Województwa polskie i niemieckie landy
@@ -1815,6 +1977,9 @@
                 mecklenburgVorpommern: { fill: '#6366f1', stroke: '#4f46e5', name: 'Mecklenburg-Vorpommern' }
             };
 
+            // Grupa do przechowywania wszystkich wielokątów dla automatycznego dopasowania widoku
+            const allPolygons = [];
+
             // Tworzenie wielokątów dla każdego obszaru
             Object.keys(serviceAreas).forEach(areaKey => {
                 const area = serviceAreas[areaKey];
@@ -1828,30 +1993,80 @@
                     fillOpacity: 0.35
                 }).addTo(map);
 
-                // Dodanie popup'a z informacjami
-                polygon.bindPopup(`
-                    <div style="padding: 10px; font-family: 'Poppins', sans-serif;">
-                        <h4 style="margin: 0 0 8px 0; color: #0A2342; font-size: 16px;">${colors.name}</h4>
-                        <p style="margin: 0; color: #718096; font-size: 14px;">Obszar działania CEMTRANS</p>
-                        <p style="margin: 4px 0 0 0; color: #718096; font-size: 12px;">Transport silosami - cement, popioły, mączki wapienne</p>
-                    </div>
-                `);
+                allPolygons.push(polygon);
 
-                // Hover effects
-                polygon.on('mouseover', function() {
+                // Popup z responsywną zawartością
+                const popupContent = `
+                    <div style="padding: ${isMobile ? '8px' : '10px'}; font-family: 'Poppins', sans-serif; min-width: ${isMobile ? '150px' : '200px'};">
+                        <h4 style="margin: 0 0 ${isMobile ? '6px' : '8px'} 0; color: #0A2342; font-size: ${isMobile ? '14px' : '16px'}; line-height: 1.2;">${colors.name}</h4>
+                        <p style="margin: 0; color: #718096; font-size: ${isMobile ? '11px' : '14px'}; line-height: 1.3;"><strong>Obszar działania CEMTRANS</strong></p>
+                        <p style="margin: ${isMobile ? '3px' : '4px'} 0 0 0; color: #718096; font-size: ${isMobile ? '10px' : '12px'}; line-height: 1.3;">Transport silosami: cement, popioły, mączki wapienne</p>
+                        <p style="margin: ${isMobile ? '3px' : '4px'} 0 0 0; color: #3b82f6; font-size: ${isMobile ? '10px' : '11px'}; font-weight: 500;">📞 +48 601 724 425</p>
+                    </div>
+                `;
+
+                polygon.bindPopup(popupContent, {
+                    maxWidth: isMobile ? 220 : 300,
+                    className: 'custom-popup',
+                    closeButton: true,
+                    autoPan: true,
+                    autoPanPadding: L.point(20, 20),
+                    keepInView: true
+                });
+
+                // Hover effects - tylko na desktop
+                if (!isMobile) {
+                    polygon.on('mouseover', function() {
+                        this.setStyle({
+                            fillOpacity: 0.5,
+                            weight: 3
+                        });
+                    });
+
+                    polygon.on('mouseout', function() {
+                        this.setStyle({
+                            fillOpacity: 0.35,
+                            weight: 2
+                        });
+                    });
+                }
+
+                // Kliknięcie - działa na wszystkich urządzeniach
+                polygon.on('click', function(e) {
+                    // Zapobiegaj propagacji eventu
+                    L.DomEvent.stopPropagation(e);
+                    
+                    // Otwórz popup na pozycji kliknięcia
+                    this.openPopup(e.latlng);
+                    
+                    // Lekkie podświetlenie na kliknięcie
                     this.setStyle({
-                        fillOpacity: 0.5,
+                        fillOpacity: 0.6,
                         weight: 3
                     });
-                });
-
-                polygon.on('mouseout', function() {
-                    this.setStyle({
-                        fillOpacity: 0.35,
-                        weight: 2
-                    });
+                    
+                    // Przywróć normalny wygląd po 2 sekundach
+                    setTimeout(() => {
+                        this.setStyle({
+                            fillOpacity: 0.35,
+                            weight: 2
+                        });
+                    }, 2000);
                 });
             });
+
+            // Automatyczne dopasowanie widoku do wszystkich obszarów
+            if (allPolygons.length > 0) {
+                const group = new L.featureGroup(allPolygons);
+                
+                // Timeout zapewnia że mapa jest w pełni załadowana
+                setTimeout(() => {
+                    map.fitBounds(group.getBounds(), {
+                        padding: isMobile ? [10, 10] : [20, 20],
+                        maxZoom: isMobile ? 6.5 : 7.5
+                    });
+                }, 500);
+            }
 
             // Dodanie markera dla siedziby firmy w Szczecinie
             const companyIcon = L.divIcon({
@@ -1883,15 +2098,24 @@
 
             const companyMarker = L.marker([53.4285, 14.5528], { icon: companyIcon }).addTo(map);
 
-            companyMarker.bindPopup(`
-                <div style="padding: 15px; font-family: 'Poppins', sans-serif; max-width: 250px;">
-                    <h4 style="margin: 0 0 10px 0; color: #0A2342; font-size: 18px;">CEMTRANS Sp. z o.o.</h4>
-                    <p style="margin: 0 0 8px 0; color: #718096; font-size: 14px;"><strong>Siedziba firmy</strong></p>
-                    <p style="margin: 0 0 8px 0; color: #718096; font-size: 14px;">ul. Południowa 15<br>71-001 Szczecin</p>
-                    <p style="margin: 0 0 8px 0; color: #718096; font-size: 14px;">📞 +48 601 724 425</p>
-                    <p style="margin: 0; color: #718096; font-size: 14px;">✉️ tomek@cemtrans.pl</p>
+            const companyPopupContent = `
+                <div style="padding: ${isMobile ? '10px' : '15px'}; font-family: 'Poppins', sans-serif; max-width: ${isMobile ? '200px' : '250px'};">
+                    <h4 style="margin: 0 0 ${isMobile ? '8px' : '10px'} 0; color: #0A2342; font-size: ${isMobile ? '16px' : '18px'}; line-height: 1.2;">CEMTRANS Sp. z o.o.</h4>
+                    <p style="margin: 0 0 ${isMobile ? '6px' : '8px'} 0; color: #718096; font-size: ${isMobile ? '12px' : '14px'};"><strong>Siedziba firmy</strong></p>
+                    <p style="margin: 0 0 ${isMobile ? '6px' : '8px'} 0; color: #718096; font-size: ${isMobile ? '11px' : '14px'}; line-height: 1.3;">ul. Południowa 15<br>71-001 Szczecin</p>
+                    <p style="margin: 0 0 ${isMobile ? '6px' : '8px'} 0; color: #718096; font-size: ${isMobile ? '11px' : '14px'};">📞 +48 601 724 425</p>
+                    <p style="margin: 0; color: #718096; font-size: ${isMobile ? '11px' : '14px'};">✉️ tomek@cemtrans.pl</p>
                 </div>
-            `);
+            `;
+
+            companyMarker.bindPopup(companyPopupContent, {
+                maxWidth: isMobile ? 220 : 300,
+                className: 'custom-popup company-popup',
+                closeButton: true,
+                autoPan: true,
+                autoPanPadding: L.point(20, 20),
+                keepInView: true
+            });
 
             // Legenda mapy
             const legend = L.control({ position: 'bottomleft' });
@@ -1925,18 +2149,72 @@
             };
 
             legend.addTo(map);
+
+            // Obsługa zmiany rozmiaru okna
+            let resizeTimeout;
+            window.addEventListener('resize', function() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function() {
+                    const newIsMobile = window.innerWidth <= 768;
+                    
+                    // Invalidate size to fix display issues
+                    map.invalidateSize();
+                    
+                    // Jeśli zmienił się typ urządzenia (desktop <-> mobile)
+                    if (newIsMobile !== isMobile) {
+                        // Opcjonalnie można przeładować mapę z nowymi ustawieniami
+                        const currentCenter = map.getCenter();
+                        const currentZoom = map.getZoom();
+                        
+                        // Dostosuj zoom dla nowego rozmiaru
+                        const newZoom = newIsMobile ? Math.max(5, currentZoom - 0.5) : Math.min(8, currentZoom + 0.5);
+                        map.setView(currentCenter, newZoom);
+                        
+                        // Włącz/wyłącz scroll wheel zoom
+                        if (newIsMobile) {
+                            map.scrollWheelZoom.disable();
+                        } else {
+                            map.scrollWheelZoom.enable();
+                        }
+                    }
+                }, 250);
+            });
+
+            // Zwróć mapę dla ewentualnych dodatkowych operacji
+            return map;
         }
+
+        // Zmienna globalna na mapę
+        let serviceMap = null;
 
         // Inicjalizacja mapy po załadowaniu strony
         document.addEventListener('DOMContentLoaded', function() {
             // Sprawdź czy Leaflet jest załadowany
             if (typeof L !== 'undefined') {
-                initServiceAreaMap();
+                serviceMap = initServiceAreaMap();
             } else {
                 // Spróbuj ponownie po krótkim czasie
-                setTimeout(initServiceAreaMap, 500);
+                setTimeout(function() {
+                    serviceMap = initServiceAreaMap();
+                }, 500);
             }
         });
+
+        // Dodatkowa funkcja do odświeżenia mapy gdy staje się widoczna (pomocne dla animacji scroll)
+        const mapSection = document.querySelector('.map-section');
+        if (mapSection && 'IntersectionObserver' in window) {
+            const mapObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && serviceMap) {
+                        setTimeout(() => {
+                            serviceMap.invalidateSize();
+                        }, 100);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            mapObserver.observe(mapSection);
+        }
     </script>
 </body>
 </html> 
