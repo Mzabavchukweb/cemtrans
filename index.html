@@ -73,6 +73,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"></noscript>
     
+    <!-- Google Maps JavaScript API -->
+    <!-- Note: Replace YOUR_API_KEY with actual Google Maps API key -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initServiceAreaMap&libraries=geometry"></script>
+    
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -140,23 +144,35 @@
       "areaServed": [
         {
           "@type": "AdministrativeArea",
-          "name": "Szczecin"
-        },
-        {
-        "@type": "AdministrativeArea",
-        "name": "Województwo Zachodniopomorskie"
-      },
-        {
-          "@type": "AdministrativeArea",
-          "name": "Police"
+          "name": "Województwo Zachodniopomorskie"
         },
         {
           "@type": "AdministrativeArea",
-          "name": "Stargard"
+          "name": "Województwo Pomorskie"
         },
         {
           "@type": "AdministrativeArea",
-          "name": "Świnoujście"
+          "name": "Województwo Wielkopolskie"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Województwo Kujawsko-Pomorskie"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Województwo Lubuskie"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Brandenburg, Niemcy"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Berlin, Niemcy"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Mecklenburg-Vorpommern, Niemcy"
         }
       ],
       "makesOffer": [
@@ -1206,6 +1222,49 @@
         body.no-scroll {
             overflow: hidden;
         }
+
+        /* --- SERVICE AREA MAP STYLES --- */
+        #service-area-map {
+            position: relative;
+        }
+        
+        .map-legend {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            font-size: 0.85rem;
+            z-index: 1000;
+            max-width: 280px;
+        }
+        
+        .map-legend h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--primary-navy);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.3rem;
+        }
+        
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            margin-right: 0.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+        }
+        
+        .poland-area { background-color: rgba(59, 130, 246, 0.6); }
+        .germany-area { background-color: rgba(16, 185, 129, 0.6); }
     </style>
 </head>
 <body>
@@ -1340,19 +1399,19 @@
         <section class="map-section">
             <div class="container">
                 <div class="map-text-content reveal-on-scroll">
-                    <h3>Obsługujemy Województwo Zachodniopomorskie</h3>
-                    <p>Nasza baza znajduje się w Szczecinie, co pozwala nam na efektywną obsługę klientów w całym województwie zachodniopomorskim. Realizujemy przewozy naczepami silos do miast takich jak Police, Stargard, Świnoujście, Koszalin, Kołobrzeg oraz innych miejscowości regionu.</p>
+                    <h3>Obszar Naszego Działania</h3>
+                    <p>Z główną bazą w Szczecinie obsługujemy klientów na terenie północnej i zachodniej Polski oraz północno-wschodnich Niemiec. Realizujemy przewozy naczepami silos w województwach: zachodniopomorskim, pomorskim, wielkopolskim, kujawsko-pomorskim, lubuskim oraz w niemieckich landach: Brandenburg, Berlin i Mecklenburg-Vorpommern.</p>
                     <p><strong>Nasze usługi obejmują:</strong></p>
                     <ul style="color: var(--gray-text); margin: 1rem 0; padding-left: 1.5rem;">
                         <li> Transport cementu naczepami typu silos</li>
                         <li> Przewóz popiołów z wykorzystaniem kompresorów</li>
                         <li> Transport mączek wapiennych</li>
                         <li> Własny tabor wraz z naczepami</li>
+                        <li> Obsługa klientów w Polsce i Niemczech</li>
                     </ul>
                 </div>
                 <div class="map-wrapper reveal-on-scroll">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2382.261895788179!2d14.51261681583769!3d53.3939629799894!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4700a0e08111059d%3A0x5291da40b42b6a21!2sPo%C5%82udniowa%2015%2C%2071-001%20Szczecin%2C%20Polska!5e0!3m2!1spl!2spl!4v1691582109876!5m2!1spl!2spl"
-                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    <div id="service-area-map" style="width: 100%; height: 450px; border-radius: 10px;"></div>
                 </div>
             </div>
         </section>
@@ -1695,6 +1754,185 @@
             link.addEventListener('click', closeMenu);
         });
         navOverlay.addEventListener('click', closeMenu);
+
+        // --- SERVICE AREA MAP INITIALIZATION ---
+        window.initServiceAreaMap = function() {
+            // Center map on northern Poland/eastern Germany border
+            const map = new google.maps.Map(document.getElementById('service-area-map'), {
+                zoom: 6,
+                center: { lat: 53.5, lng: 15.0 },
+                mapTypeId: 'roadmap',
+                styles: [
+                    {
+                        featureType: 'water',
+                        elementType: 'geometry',
+                        stylers: [{ color: '#a4c2f4' }]
+                    },
+                    {
+                        featureType: 'landscape',
+                        elementType: 'geometry',
+                        stylers: [{ color: '#f5f5f5' }]
+                    }
+                ]
+            });
+
+            // Simplified polygon coordinates for Polish voivodeships
+            const serviceAreas = {
+                // Polish voivodeships
+                zachodniopomorskie: [
+                    { lat: 53.9, lng: 14.2 }, { lat: 54.5, lng: 14.5 }, { lat: 54.8, lng: 16.2 },
+                    { lat: 54.4, lng: 17.0 }, { lat: 53.8, lng: 16.8 }, { lat: 53.3, lng: 15.8 },
+                    { lat: 52.9, lng: 14.8 }, { lat: 52.8, lng: 14.3 }
+                ],
+                pomorskie: [
+                    { lat: 54.8, lng: 16.2 }, { lat: 54.9, lng: 18.8 }, { lat: 54.5, lng: 19.0 },
+                    { lat: 54.0, lng: 18.8 }, { lat: 53.8, lng: 17.8 }, { lat: 54.4, lng: 17.0 }
+                ],
+                wielkopolskie: [
+                    { lat: 52.8, lng: 14.3 }, { lat: 52.9, lng: 14.8 }, { lat: 53.3, lng: 15.8 },
+                    { lat: 53.1, lng: 17.2 }, { lat: 52.5, lng: 17.8 }, { lat: 51.8, lng: 17.2 },
+                    { lat: 51.5, lng: 16.2 }, { lat: 51.7, lng: 15.0 }
+                ],
+                kujawsko_pomorskie: [
+                    { lat: 53.8, lng: 16.8 }, { lat: 54.4, lng: 17.0 }, { lat: 54.0, lng: 18.8 },
+                    { lat: 53.5, lng: 19.8 }, { lat: 52.8, lng: 19.2 }, { lat: 53.1, lng: 17.2 }
+                ],
+                lubuskie: [
+                    { lat: 52.8, lng: 14.3 }, { lat: 51.7, lng: 15.0 }, { lat: 51.2, lng: 15.8 },
+                    { lat: 51.8, lng: 14.7 }, { lat: 51.5, lng: 14.2 }
+                ],
+                
+                // German states (Bundesländer)
+                brandenburg: [
+                    { lat: 53.6, lng: 11.3 }, { lat: 53.8, lng: 14.8 }, { lat: 52.8, lng: 14.3 },
+                    { lat: 51.5, lng: 14.2 }, { lat: 51.4, lng: 11.9 }, { lat: 52.2, lng: 11.4 }
+                ],
+                berlin: [
+                    { lat: 52.67, lng: 13.09 }, { lat: 52.67, lng: 13.76 }, { lat: 52.34, lng: 13.76 }, { lat: 52.34, lng: 13.09 }
+                ],
+                mecklenburg_vorpommern: [
+                    { lat: 54.7, lng: 10.5 }, { lat: 54.8, lng: 14.5 }, { lat: 53.9, lng: 14.2 },
+                    { lat: 53.6, lng: 11.3 }, { lat: 53.9, lng: 10.7 }
+                ]
+            };
+
+            // Create polygons for Polish areas (blue)
+            const polishAreas = ['zachodniopomorskie', 'pomorskie', 'wielkopolskie', 'kujawsko_pomorskie', 'lubuskie'];
+            polishAreas.forEach(area => {
+                const polygon = new google.maps.Polygon({
+                    paths: serviceAreas[area],
+                    strokeColor: '#3b82f6',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#3b82f6',
+                    fillOpacity: 0.35,
+                    map: map
+                });
+
+                // Add info window
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `<div style="padding: 5px;"><strong>Województwo ${area.replace('_', '-')}</strong><br/>Obszar działania CEMTRANS</div>`
+                });
+
+                polygon.addListener('click', (event) => {
+                    infoWindow.setPosition(event.latLng);
+                    infoWindow.open(map);
+                });
+            });
+
+            // Create polygons for German areas (green)
+            const germanAreas = ['brandenburg', 'berlin', 'mecklenburg_vorpommern'];
+            germanAreas.forEach(area => {
+                const polygon = new google.maps.Polygon({
+                    paths: serviceAreas[area],
+                    strokeColor: '#10b981',
+                    strokeOpacity: 0.8,
+                    strokeWeight: 2,
+                    fillColor: '#10b981',
+                    fillOpacity: 0.35,
+                    map: map
+                });
+
+                // Add info window
+                let displayName = area.charAt(0).toUpperCase() + area.slice(1).replace('_', '-');
+                if (area === 'mecklenburg_vorpommern') displayName = 'Mecklenburg-Vorpommern';
+                
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `<div style="padding: 5px;"><strong>${displayName}</strong><br/>CEMTRANS service area</div>`
+                });
+
+                polygon.addListener('click', (event) => {
+                    infoWindow.setPosition(event.latLng);
+                    infoWindow.open(map);
+                });
+            });
+
+            // Add company location marker (Szczecin)
+            const companyMarker = new google.maps.Marker({
+                position: { lat: 53.4285, lng: 14.5528 },
+                map: map,
+                title: 'CEMTRANS Sp. z o.o. - Szczecin',
+                icon: {
+                    url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+                            <circle cx="20" cy="20" r="18" fill="#0A2342" stroke="#fff" stroke-width="3"/>
+                            <text x="20" y="26" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#fff" text-anchor="middle">C</text>
+                        </svg>
+                    `),
+                    scaledSize: new google.maps.Size(40, 40),
+                    anchor: new google.maps.Point(20, 20)
+                }
+            });
+
+            const companyInfoWindow = new google.maps.InfoWindow({
+                content: `
+                    <div style="padding: 10px; max-width: 250px;">
+                        <h4 style="margin: 0 0 8px 0; color: #0A2342;">CEMTRANS Sp. z o.o.</h4>
+                        <p style="margin: 0 0 8px 0;">ul. Południowa 15<br/>71-001 Szczecin</p>
+                        <p style="margin: 0 0 8px 0;"><strong>Tel:</strong> +48 601 724 425</p>
+                        <p style="margin: 0;"><strong>Email:</strong> tomek@cemtrans.pl</p>
+                    </div>
+                `
+            });
+
+            companyMarker.addListener('click', () => {
+                companyInfoWindow.open(map, companyMarker);
+            });
+
+            // Add map legend
+            const legend = document.createElement('div');
+            legend.className = 'map-legend';
+            legend.innerHTML = `
+                <h4>Obszary działania</h4>
+                <div class="legend-item">
+                    <div class="legend-color poland-area"></div>
+                    <span>Województwa Polski</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color germany-area"></div>
+                    <span>Landy Niemiec</span>
+                </div>
+            `;
+            
+            document.getElementById('service-area-map').appendChild(legend);
+        };
+
+        // Fallback if Google Maps fails to load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (!window.google && document.getElementById('service-area-map')) {
+                    document.getElementById('service-area-map').innerHTML = `
+                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f5f5f5; color: #666; text-align: center; padding: 2rem;">
+                            <div>
+                                <i class="fa-solid fa-map" style="font-size: 3rem; margin-bottom: 1rem; color: #3b82f6;"></i>
+                                <h4>Mapa obszarów działania</h4>
+                                <p>Obsługujemy północną i zachodnią Polskę<br/>oraz północno-wschodnie Niemcy</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }, 3000);
+        });
     </script>
 </body>
 </html> 
